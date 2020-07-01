@@ -1,42 +1,27 @@
-const { Pool } = require('pg');
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const PORT = process.env.PORT || 5000;
+const app = express();
+
+const jsonParser = bodyParser.json();
+
+app.post('/sms', jsonParser, (req, res) => {
+  const accountSid = process.env.ACCOUNT_SID;
+  const authToken = process.env.AUTH_TOKEN;
+  const fromNumber = process.env.PHONE_NUM;
+  const toNumber = req.body.sendNumber;
+  const message = req.body.message;
+  const client = require('twilio')(accountSid, authToken);
+  client.messages
+  .create({
+     body: message,
+     from: fromNumber,
+     to: toNumber
+   })
+  .then(() => res.sendStatus(200))
+  .catch(() => res.sendStatus(500));
 });
 
-const cool = require('cool-ascii-faces');
-const express = require('express');
-const path = require('path');
-const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .get('/cool', (req, res) => res.send(cool()))
-  .get('/times', (req, res) => res.send(showTimes()))
-  .get('/db', async (req, res) => {
-    try {
-      const client = await pool.connect();
-      const result = await client.query('SELECT * FROM test_table');
-      const results = { 'results': (result) ? result.rows : null};
-      res.render('pages/db', results );
-      client.release();
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
-  })
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
-  showTimes = () => {
-    let result = '';
-    const times = process.env.TIMES || 5;
-    for (i = 0; i < times; i++) {
-      result += i + ' ';
-    }
-    return result;
-  }
