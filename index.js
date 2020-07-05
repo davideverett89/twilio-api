@@ -29,5 +29,22 @@ app.post('/sms', jsonParser, (req, res) => {
   .catch(() => res.sendStatus(500));
 });
 
+app.post('/email', jsonParser, (req, res) => {
+  const accountSid = process.env.ACCOUNT_SID;
+  const authToken = process.env.AUTH_TOKEN;
+  const fromEmail = process.env.EMAIL;
+  const toEmail = req.body.sendEmail;
+  const message = req.body.message;
+  const client = require('twilio')(accountSid, authToken);
+  client.messages
+  .create({
+     body: message,
+     from: fromEmail,
+     to: toEmail
+   })
+  .then(() => res.sendStatus(200))
+  .catch(() => res.sendStatus(500));
+});
+
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
