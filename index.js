@@ -1,4 +1,5 @@
 require('dotenv').config();
+const sgMail = require("@sendgrid/mail");
 const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
@@ -54,7 +55,6 @@ app.post('/sms', jsonParser, (req, res) => {
 //   });
 // });
 
-const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const msg = {
   to: "davideverett1989@gmail.com",
@@ -63,9 +63,10 @@ const msg = {
   text: "and easy to do",
 };
 
-app.get('/sendmail', (req, res) => {
-  sgMail.send(msg);
-  res.send('Successfully sent mail');
+app.get('/send-email', (req, res) => {
+  console.log(req);
+  // sgMail.send(msg);
+  // res.send('Successfully sent mail');
 })
 
 
