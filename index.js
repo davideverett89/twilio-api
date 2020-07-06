@@ -29,30 +29,44 @@ app.post('/sms', jsonParser, (req, res) => {
   .catch(() => res.sendStatus(500));
 });
 
-app.post('/', jsonParser, (req, res) => {
-  const sgMail = require('@sendgrid/mail');
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const toEmail = req.body.toEmail;
-  const fromEmail = process.env.EMAIL;
-  const subject = req.body.subject;
-  const text = req.body.text;
-  const msg = {
-    to: toEmail,
-    from: fromEmail,
-    subject: subject,
-    text: text,
-    html: `<strong>${text}</strong>`,
-};
-sgMail
-  .send(msg)
-  .then(() => {}, error => {
-    console.error(error);
+// app.post('/', jsonParser, (req, res) => {
+//   const sgMail = require('@sendgrid/mail');
+//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//   const toEmail = req.body.toEmail;
+//   const fromEmail = process.env.EMAIL;
+//   const subject = req.body.subject;
+//   const text = req.body.text;
+//   const msg = {
+//     to: toEmail,
+//     from: fromEmail,
+//     subject: subject,
+//     text: text,
+//     html: `<strong>${text}</strong>`,
+// };
+// sgMail
+//   .send(msg)
+//   .then(() => {}, error => {
+//     console.error(error);
 
-    if (error.response) {
-      console.error(error.response.body)
-    }
-  });
-});
+//     if (error.response) {
+//       console.error(error.response.body)
+//     }
+//   });
+// });
+
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const msg = {
+  to: "davideverett1989@gmail.com",
+  from: "davideverett1989@gmail.com",
+  subject: "This is a test",
+  text: "and easy to do",
+};
+
+app.get('/sendmail', (req, res) => {
+  sgMail.send(msg);
+  res.send('Successfully sent mail');
+})
 
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
