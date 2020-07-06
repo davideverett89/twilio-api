@@ -63,7 +63,7 @@ const msg = {
   text: "and easy to do",
 };
 
-app.get('/send-email', (req, res) => {
+app.post('/send-email', (req, res) => {
   console.log(req);
   // sgMail.send(msg);
   // res.send('Successfully sent mail');
