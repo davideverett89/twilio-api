@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -31,21 +30,28 @@ app.post('/sms', jsonParser, (req, res) => {
 });
 
 app.post('/email', jsonParser, (req, res) => {
+  const sgMail = require('@sendgrid/mail');
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const toEmail = req.body.toEmail;
+  const fromEmail = process.env.EMAIL;
   const subject = req.body.subject;
   const text = req.body.text;
   const msg = {
     to: toEmail,
-    from: 'davideverett1989@gmail.com',
+    from: fromEmail,
     subject: subject,
     text: text,
-    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    html: `<strong>${text}</strong>`,
 };
 sgMail
   .send(msg)
-  .then(() => res.sendStatus(200))
-  .catch(() => res.sendStatus(500))
+  .then(() => {}, error => {
+    console.error(error);
+
+    if (error.response) {
+      console.error(error.response.body)
+    }
+  });
 });
 
 
