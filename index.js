@@ -29,7 +29,7 @@ app.post('/sms', jsonParser, (req, res) => {
   .catch(() => res.sendStatus(500));
 });
 
-app.post('/email', jsonParser, (req, res) => {
+app.post('/', jsonParser, (req, res) => {
   const sgMail = require('@sendgrid/mail');
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const toEmail = req.body.toEmail;
