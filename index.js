@@ -33,14 +33,15 @@ app.post('/sms', jsonParser, (req, res) => {
 app.post('/email', jsonParser, (req, res) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const toEmail = req.body.toEmail;
+  const fromEmail = process.env.EMAIL;
   const subject = req.body.subject;
   const text = req.body.text;
   const msg = {
     to: toEmail,
-    from: 'davideverett1989@gmail.com',
+    from: fromEmail,
     subject: subject,
     text: text,
-    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    html: `<strong>${text}</strong>`,
 };
 sgMail
   .send(msg)
