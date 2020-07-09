@@ -54,8 +54,6 @@ app.post('/send', jsonParser, (req, res, next) => {
       console.log('Here is the response:', res);
     }
   })
-  .then(() => res.sendStatus(200))
-  .catch(() => res.sendStatus(500));
 });
 
 
