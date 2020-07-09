@@ -31,6 +31,7 @@ app.post('/sms', jsonParser, (req, res) => {
 });
 
 app.post('/send', jsonParser, (req, res, next) => {
+  console.log(req);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
