@@ -39,22 +39,23 @@ app.post('/send', jsonParser, (req, res, next) => {
       pass: 'undertow93$',
     }
   })
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: req.body.sendEmail,
-    subject: req.body.name,
-    text: req.body.message,
-  }
-  transporter.sendMail(mailOptions, (err, res) => {
-    if (err) {
-      console.error('There was an error sending this message:', err);
-    } else {
-      console.log('Here is the response:', res);
-    }
-  })
-  .then(() => res.sendStatus(200))
-  .catch(() => res.sendStatus(500));
 });
+
+const mailOptions = {
+  from: process.env.EMAIL,
+  to: req.body.sendEmail,
+  subject: req.body.name,
+  text: req.body.message,
+}
+transporter.sendMail(mailOptions, (err, res) => {
+  if (err) {
+    console.error('There was an error sending this message:', err);
+  } else {
+    console.log('Here is the response:', res);
+  }
+})
+.then(() => res.sendStatus(200))
+.catch(() => res.sendStatus(500));
 
 
 
