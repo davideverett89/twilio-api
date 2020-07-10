@@ -74,6 +74,33 @@ app.post('/send', jsonParser, (req, res) => {
   res.sendStatus(200);
 });
 
+const sendBirthdayEmail = (emails) => {
+  const toEmail = emails;
+  const subject = '';
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    }
+  })
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: toEmail,
+    subject,
+    text,
+  }
+  transporter.sendMail(mailOptions, (err, res) => {
+    if (err) {
+      console.error('There was an error sending this message:', err);
+    } else {
+      console.log('Here is the response:', res);
+    }
+  })
+}
+
 cron.schedule("* * * * * *", () => {
   getUserEmailsWithCurrentBirthday(today)
     .then((emails) => {
