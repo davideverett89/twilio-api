@@ -63,6 +63,7 @@ app.post('/send', jsonParser, (req, res) => {
       console.log('Here is the response:', res);
     }
   })
+  res.sendStatus(200);
 });
 
 
