@@ -31,35 +31,39 @@ app.post('/sms', jsonParser, (req, res) => {
   .catch(() => res.sendStatus(500));
 });
 
-app.post('/send', jsonParser, (req, res) => {
-  console.log(req.body);
-});
 
-// app.post('/send', (req, res) => {
-//   const toEmail = req.body.sendEmail;
-//   const subject = req.body.name;
-//   const text = req.body.message;
-//   const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//       user: process.env.EMAIL,
-//       pass: process.env.PASSWORD,
-//     }
-//   })
-//   const mailOptions = {
-//     from: process.env.EMAIL,
-//     to: toEmail,
-//     subject,
-//     text,
-//   }
-//   transporter.sendMail(mailOptions, (err, res) => {
-//     if (err) {
-//       console.error('There was an error sending this message:', err);
-//     } else {
-//       console.log('Here is the response:', res);
-//     }
-//   })
-// });
+app.post('/send', jsonParser, (req, res) => {
+  const toEmail = req.body.sendEmail;
+  const subject = req.body.name;
+  const text = req.body.message;
+  console.log('This email is going to:', toEmail);
+  console.log('The subject of this email is:', subject);
+  console.log('The text of this email is:', text);
+  console.log(process.env.EMAIL)
+  console.log(process.env.PASSWORD);
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    }
+  })
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: toEmail,
+    subject,
+    text,
+  }
+  transporter.sendMail(mailOptions, (err, res) => {
+    if (err) {
+      console.error('There was an error sending this message:', err);
+    } else {
+      console.log('Here is the response:', res);
+    }
+  })
+});
 
 
 
