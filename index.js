@@ -44,11 +44,6 @@ app.post('/send', jsonParser, (req, res) => {
   const toEmail = req.body.sendEmail;
   const subject = req.body.name;
   const text = req.body.message;
-  console.log('This email is going to:', toEmail);
-  console.log('The subject of this email is:', subject);
-  console.log('The text of this email is:', text);
-  console.log(process.env.EMAIL)
-  console.log(process.env.PASSWORD);
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -76,7 +71,8 @@ app.post('/send', jsonParser, (req, res) => {
 
 const sendBirthdayEmail = (emails) => {
   const toEmail = emails;
-  const subject = '';
+  const subject = 'It\'s Your Birthday!';
+  const text = 'Come check out what your friends have to say!: https://socially-distant-birthday.firebaseapp.com';
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -101,10 +97,12 @@ const sendBirthdayEmail = (emails) => {
   })
 }
 
-cron.schedule("* * * * * *", () => {
+cron.schedule("* * * * *", () => {
   getUserEmailsWithCurrentBirthday(today)
     .then((emails) => {
-      console.log(emails);
+      if (emails.length > 0) {
+        sendBirthdayEmail(emails);
+      }
     })
     .catch((err) => console.error('There was an issue with getting today\'s birthday emails:', err));
 });
