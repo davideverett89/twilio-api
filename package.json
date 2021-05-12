@@ -20,7 +20,7 @@
     "fs": "0.0.1-security",
     "moment": "^2.27.0",
     "node-cron": "^2.0.3",
-    "nodemailer": "^6.4.10",
+    "nodemailer": "^6.4.16",
     "twilio": "^3.47.0"
   },
   "devDependencies": {
